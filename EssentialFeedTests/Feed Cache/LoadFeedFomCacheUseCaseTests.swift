@@ -51,7 +51,7 @@ final class LoadFeedFomCacheUseCaseTests: XCTestCase {
         })
     }
     
-    func test_load_deliversNOImagesOnSevenDaysOldCache() {
+    func test_load_deliversNoImagesOnSevenDaysOldCache() {
         let feed = uniqueImageFeed()
         let fixedCurrentDate = Date()
         let sevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7)
