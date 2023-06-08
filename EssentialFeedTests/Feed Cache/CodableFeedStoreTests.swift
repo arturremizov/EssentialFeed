@@ -224,6 +224,6 @@ final class CodableFeedStoreTests: XCTestCase {
     }
     
     private func cachedDirectory() -> URL {
-        return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+        return FileManager.default.urls(for: .cachesDirectory, in: .systemDomainMask)[0]
     }
 }
