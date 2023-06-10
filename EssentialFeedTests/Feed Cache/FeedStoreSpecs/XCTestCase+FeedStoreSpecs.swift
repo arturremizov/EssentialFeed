@@ -37,33 +37,54 @@ extension FeedStoreSpecs where Self: XCTestCase {
         expect(sut, toRetieveTwice: .found(feed: feed, timestamp: timestamp), file: file, line: line)
     }
     
+    func assertThatInsertDeliversNoErrorOnEmptyCache(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
+        let firstInsertionError = insert((uniqueImageFeed().local, Date()), to: sut)
+        XCTAssertNil(firstInsertionError, "Expected to insert cache successfully", file: file, line: line)
+    }
+    
+    func assertThatInsertDeliversNoErrorOnNonEmptyCache(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
+        insert((uniqueImageFeed().local, Date()), to: sut)
+     
+        let latestInsertionError = insert((uniqueImageFeed().local, Date()), to: sut)
+        
+        XCTAssertNil(latestInsertionError, "Expected to override cache successfully", file: file, line: line)
+    }
+    
     func assertThatInsertOverridesPreviouslyInsertedCacheValues(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
         
-        let firstInsertionError = insert((uniqueImageFeed().local, Date()), to: sut)
-        XCTAssertNil(firstInsertionError, "Expected to insert cache successfully")
+        insert((uniqueImageFeed().local, Date()), to: sut)
         
         let latestFeed = uniqueImageFeed().local
         let latestTimestamp = Date()
-        let latestInsertionError = insert((latestFeed, latestTimestamp), to: sut)
-        
-        XCTAssertNil(latestInsertionError, "Expected to override cache successfully")
+        insert((latestFeed, latestTimestamp), to: sut)
         
         expect(sut, toRetieve: .found(feed: latestFeed, timestamp: latestTimestamp), file: file, line: line)
     }
     
-    func assertThatDeleteHasNoSideEffectsOnEmptyCache(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
+    func assertThatDeleteDeliversNoErrorOnEmptyCache(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
         let deletionError = deleteCache(from: sut)
         
-        XCTAssertNil(deletionError, "Expected empty cache deletion to succeed")
+        XCTAssertNil(deletionError, "Expected empty cache deletion to succeed", file: file, line: line)
+    }
+    
+    func assertThatDeleteHasNoSideEffectsOnEmptyCache(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
+        
+        deleteCache(from: sut)
+
         expect(sut, toRetieve: .empty, file: file, line: line)
+    }
+    
+    func assertThatDeleteDeliversNoErrorOnNonEmptyCache(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
+        insert((uniqueImageFeed().local, Date()), to: sut)
+        
+        let deletionError = deleteCache(from: sut)
+        XCTAssertNil(deletionError, "Expected non-empty cache deletion to succeed", file: file, line: line)
     }
     
     func assertThatDeleteEmptiesPreviouslyInsertedCache(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
         
         insert((uniqueImageFeed().local, Date()), to: sut)
-        
-        let deletionError = deleteCache(from: sut)
-        XCTAssertNil(deletionError, "Expected non-empty cache deletion to succeed")
+        deleteCache(from: sut)
         
         expect(sut, toRetieve: .empty, file: file, line: line)
     }
@@ -132,8 +153,8 @@ extension FeedStoreSpecs where Self: XCTestCase {
                  (.failure, .failure):
                 break
             case let (.found(expectedFeed, expectedTimestamp), .found(retrievedFeed, retrievedTimestamp)):
-                XCTAssertEqual(expectedFeed, retrievedFeed)
-                XCTAssertEqual(expectedTimestamp, retrievedTimestamp)
+                XCTAssertEqual(expectedFeed, retrievedFeed, file: file, line: line)
+                XCTAssertEqual(expectedTimestamp, retrievedTimestamp, file: file, line: line)
                 
             default:
                 XCTFail("Expected to retrieve \(expectedResult), got \(retrievedResult) instead.", file: file, line: line)
