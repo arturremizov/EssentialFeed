@@ -21,9 +21,10 @@ final public class CoreDataFeedStore: FeedStore {
         perform { context in
             do {
                 if let cacheEntity = try CacheEntity.find(in: context) {
-                    completion(.success(.found(feed: cacheEntity.localFeed, timestamp: cacheEntity.timestamp!)))
+                    let cache = CachedFeed(feed: cacheEntity.localFeed, timestamp: cacheEntity.timestamp!)
+                    completion(.success(cache))
                 } else {
-                    completion(.success(.empty))
+                    completion(.success(.none))
                 }
             } catch {
                 completion(.failure(error))
@@ -34,9 +35,9 @@ final public class CoreDataFeedStore: FeedStore {
     public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
         perform { context in
             do {
-                let cacheEnity = try CacheEntity.newUniqueInstance(in: context)
-                cacheEnity.feed = FeedImageEntity.images(from: feed, in: context)
-                cacheEnity.timestamp = timestamp
+                let cacheEntity = try CacheEntity.newUniqueInstance(in: context)
+                cacheEntity.feed = FeedImageEntity.images(from: feed, in: context)
+                cacheEntity.timestamp = timestamp
                 
                 try context.save()
                 completion(nil)
