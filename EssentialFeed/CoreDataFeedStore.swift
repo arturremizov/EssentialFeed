@@ -40,9 +40,9 @@ final public class CoreDataFeedStore: FeedStore {
                 cacheEntity.timestamp = timestamp
                 
                 try context.save()
-                completion(nil)
+                completion(.success(Void()))
             } catch {
-                completion(error)
+                completion(.failure(error))
             }
         }
     }
@@ -54,9 +54,9 @@ final public class CoreDataFeedStore: FeedStore {
                     .map(context.delete)
                     .map(context.save)
                 
-                completion(nil)
+                completion(.success(Void()))
             } catch {
-                completion(error)
+                completion(.failure(error))
             }
         }
     }

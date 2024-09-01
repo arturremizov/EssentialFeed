@@ -86,7 +86,7 @@ final class CacheFeedUseCaseTests: XCTestCase {
         let store = FeedStoreSpy()
         var sut: LocalFeedLoader? = LocalFeedLoader(store: store, currentDate: Date.init)
         
-        var receivedResults: [Error?] = []
+        var receivedResults: [LocalFeedLoader.SaveResult] = []
         sut?.save(uniqueImageFeed().models, completion: { receivedResults.append($0) })
         
         store.completeDeletionSuccessfully()
@@ -107,8 +107,8 @@ final class CacheFeedUseCaseTests: XCTestCase {
     private func expect(_ sut: LocalFeedLoader, toCompleteWithError expectedError: NSError?, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         let ext = expectation(description: "Wait for save completion")
         var receivedError: Error?
-        sut.save(uniqueImageFeed().models) { error in
-            receivedError = error
+        sut.save(uniqueImageFeed().models) { result in
+            if case let LocalFeedLoader.SaveResult.failure(error) = result { receivedError = error }
             ext.fulfill()
         }
         action()
