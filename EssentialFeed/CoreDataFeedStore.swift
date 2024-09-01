@@ -21,9 +21,9 @@ final public class CoreDataFeedStore: FeedStore {
         perform { context in
             do {
                 if let cacheEntity = try CacheEntity.find(in: context) {
-                    completion(.found(feed: cacheEntity.localFeed, timestamp: cacheEntity.timestamp!))
+                    completion(.success(.found(feed: cacheEntity.localFeed, timestamp: cacheEntity.timestamp!)))
                 } else {
-                    completion(.empty)
+                    completion(.success(.empty))
                 }
             } catch {
                 completion(.failure(error))
