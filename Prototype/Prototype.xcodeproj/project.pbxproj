@@ -12,6 +12,7 @@
 		AF3B87022C9247BF00B274D8 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = AF3B87012C9247BF00B274D8 /* Base */; };
 		AF3B87042C9247C100B274D8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AF3B87032C9247C100B274D8 /* Assets.xcassets */; };
 		AF3B87072C9247C100B274D8 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = AF3B87062C9247C100B274D8 /* Base */; };
+		AF3B870F2C9252B700B274D8 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3B870E2C9252B700B274D8 /* FeedViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		AF3B87032C9247C100B274D8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AF3B87062C9247C100B274D8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AF3B87082C9247C100B274D8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AF3B870E2C9252B700B274D8 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 				AF3B86FA2C9247BF00B274D8 /* AppDelegate.swift */,
 				AF3B86FC2C9247BF00B274D8 /* SceneDelegate.swift */,
 				AF3B87002C9247BF00B274D8 /* Main.storyboard */,
+				AF3B870E2C9252B700B274D8 /* FeedViewController.swift */,
 				AF3B87032C9247C100B274D8 /* Assets.xcassets */,
 				AF3B87052C9247C100B274D8 /* LaunchScreen.storyboard */,
 				AF3B87082C9247C100B274D8 /* Info.plist */,
@@ -136,6 +139,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AF3B86FB2C9247BF00B274D8 /* AppDelegate.swift in Sources */,
+				AF3B870F2C9252B700B274D8 /* FeedViewController.swift in Sources */,
 				AF3B86FD2C9247BF00B274D8 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
