@@ -7,6 +7,12 @@
 
 import UIKit
 
+struct FeedImageViewModel {
+    let location: String?
+    let imageName: String
+    let description: String?
+}
+
 class FeedViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
