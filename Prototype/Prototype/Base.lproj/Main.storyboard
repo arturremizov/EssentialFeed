@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="FeedImageCell" rowHeight="580" id="jXD-sa-ITC">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="FeedImageCell" rowHeight="580" id="jXD-sa-ITC" customClass="FeedImageCell" customModule="Prototype" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="50" width="393" height="580"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="jXD-sa-ITC" id="eUH-iG-6bu">
@@ -74,6 +74,12 @@
                                         <constraint firstItem="4cM-28-vcg" firstAttribute="top" secondItem="eUH-iG-6bu" secondAttribute="topMargin" priority="999" constant="6" id="sF6-Ds-aPR"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="descriptionLabel" destination="3vF-sg-IzH" id="36Y-Al-WeT"/>
+                                    <outlet property="feedImageView" destination="KfK-0l-0xk" id="FSP-of-ddN"/>
+                                    <outlet property="locationContainer" destination="kNc-M2-WUy" id="MV4-Co-DfZ"/>
+                                    <outlet property="locationLabel" destination="IVS-J7-GB5" id="Svy-n4-yDw"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
