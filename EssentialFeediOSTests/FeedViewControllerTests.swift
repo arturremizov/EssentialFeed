@@ -25,6 +25,11 @@ final class FeedViewController: UITableViewController {
         load()
     }
     
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+        refreshControl?.beginRefreshing()
+    }
+    
     @objc private func load() {
         loader?.load { _ in }
     }
@@ -41,20 +46,28 @@ final class FeedViewControllerTests: XCTestCase {
     func test_viewDidLoad_loadsFeed() {
         let (sut, loader) = makeSUT()
         
-        sut.loadViewIfNeeded()
+        sut.simulateAppearance()
         
         XCTAssertEqual(loader.loadCallCount, 1)
     }
     
     func test_pullToRefresh_loadsFeed() {
         let (sut, loader) = makeSUT()
-        sut.loadViewIfNeeded()
+        sut.simulateAppearance()
         
         sut.refreshControl?.simulatePullToRefresh()
         XCTAssertEqual(loader.loadCallCount, 2)
         
         sut.refreshControl?.simulatePullToRefresh()
         XCTAssertEqual(loader.loadCallCount, 3)
+    }
+    
+    func test_viewDidLoad_showsLoadingIndicator() {
+        let (sut, _) = makeSUT()
+        
+        sut.simulateAppearance()
+        
+        XCTAssertEqual(sut.refreshControl?.isRefreshing, true)
     }
     
     // MARK: - Helpers
@@ -72,6 +85,43 @@ final class FeedViewControllerTests: XCTestCase {
         func load(completion: @escaping (FeedLoader.Result) -> Void) {
             loadCallCount += 1
         }
+    }
+}
+
+private extension FeedViewController {
+
+     func simulateAppearance() {
+         substituteRefreshControlToSpy()
+
+         beginAppearanceTransition(true, animated: false)
+         endAppearanceTransition()
+     }
+
+     func substituteRefreshControlToSpy() {
+         let spy = RefreshControlSpy()
+
+         refreshControl?.allTargets.forEach { target in
+             refreshControl?.actions(forTarget: target, forControlEvent: .valueChanged)?.forEach { action in
+                 spy.addTarget(target, action: Selector(action), for: .valueChanged)
+             }
+         }
+
+         self.refreshControl = spy
+     }
+ }
+
+
+private class RefreshControlSpy: UIRefreshControl {
+    private var _isRefreshing = false
+
+    override var isRefreshing: Bool { _isRefreshing }
+
+    override func beginRefreshing() {
+        _isRefreshing = true
+    }
+
+    override func endRefreshing() {
+        _isRefreshing = false
     }
 }
 
