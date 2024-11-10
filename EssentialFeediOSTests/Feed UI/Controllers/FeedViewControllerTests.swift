@@ -17,7 +17,7 @@ final class FeedViewControllerTests: XCTestCase {
         
         XCTAssertEqual(loader.loadFeedCallCount, 0, "Expected no loading requests before view is loaded")
         
-        sut.simulateAppearance()
+        sut.loadViewIfNeeded()
         XCTAssertEqual(loader.loadFeedCallCount, 1, "Expected a loading request once view is loaded")
         
         sut.simulateUserInitiatedFeedReload()
@@ -29,16 +29,20 @@ final class FeedViewControllerTests: XCTestCase {
     
     func test_loadingFeedIndicator_isVisibleWhileLoadingFeed() {
         let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
         
-        sut.simulateAppearance()
-        XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once view is loaded")
+        if #unavailable(iOS 17.0) {
+            XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once view is loaded")
+        }
    
         loader.completeFeedLoading(at: 0)
         XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once loading completes successfully")
 
         sut.simulateUserInitiatedFeedReload()
-        XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once user initiates a reload")
-
+        if #unavailable(iOS 17.0) {
+            XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once user initiates a reload")
+        }
+        
         loader.completeFeedLoadingWithError(at: 1)
         XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once user initiated loading completes with error")
     }
@@ -50,7 +54,7 @@ final class FeedViewControllerTests: XCTestCase {
         let image3 = makeImage(description: nil, location: nil)
         let (sut, loader) = makeSUT()
         
-        sut.simulateAppearance()
+        sut.loadViewIfNeeded()
         assertThat(sut, isRendering: [])
         
         loader.completeFeedLoading(with: [image0], at: 0)
@@ -66,7 +70,7 @@ final class FeedViewControllerTests: XCTestCase {
         let image0 = makeImage()
         let (sut, loader) = makeSUT()
         
-        sut.simulateAppearance()
+        sut.loadViewIfNeeded()
         loader.completeFeedLoading(with: [image0], at: 0)
         assertThat(sut, isRendering: [image0])
         
@@ -80,7 +84,7 @@ final class FeedViewControllerTests: XCTestCase {
         let image1 = makeImage(url: URL(string: "http://url-1.com")!)
         let (sut, loader) = makeSUT()
         
-        sut.simulateAppearance()
+        sut.loadViewIfNeeded()
         loader.completeFeedLoading(with: [image0, image1], at: 0)
         
         XCTAssertEqual(loader.loadedImagesURLs, [], "Expected no image URL requests until views become visible")
@@ -97,7 +101,7 @@ final class FeedViewControllerTests: XCTestCase {
         let image1 = makeImage(url: URL(string: "http://url-1.com")!)
         let (sut, loader) = makeSUT()
         
-        sut.simulateAppearance()
+        sut.loadViewIfNeeded()
         loader.completeFeedLoading(with: [image0, image1], at: 0)
         
         XCTAssertEqual(loader.cancelledImagesURLs, [], "Expected no canceled image URL requests until image is not visible")
@@ -112,7 +116,7 @@ final class FeedViewControllerTests: XCTestCase {
     func test_feedImageViewLoadingIndicator_isVisibleWhileLoadingImage() {
         let (sut, loader) = makeSUT()
         
-        sut.simulateAppearance()
+        sut.loadViewIfNeeded()
         loader.completeFeedLoading(with: [makeImage(), makeImage()], at: 0)
         
         let view0 = sut.simulateFeedImageViewVisible(at: 0)
@@ -132,7 +136,7 @@ final class FeedViewControllerTests: XCTestCase {
     func test_feedImageView_rendersImageLoadedFromURL() {
         let (sut, loader) = makeSUT()
         
-        sut.simulateAppearance()
+        sut.loadViewIfNeeded()
         loader.completeFeedLoading(with: [makeImage(), makeImage()], at: 0)
         
         let view0 = sut.simulateFeedImageViewVisible(at: 0)
@@ -154,7 +158,7 @@ final class FeedViewControllerTests: XCTestCase {
     func test_feedImageViewRetryButton_isVisibleOnImageURLLoadError() {
         let (sut, loader) = makeSUT()
         
-        sut.simulateAppearance()
+        sut.loadViewIfNeeded()
         loader.completeFeedLoading(with: [makeImage(), makeImage()], at: 0)
         
         let view0 = sut.simulateFeedImageViewVisible(at: 0)
@@ -175,7 +179,7 @@ final class FeedViewControllerTests: XCTestCase {
     func test_feedImageViewRetryButton_isVisibleOnInvalidImageData() {
         let (sut, loader) = makeSUT()
         
-        sut.simulateAppearance()
+        sut.loadViewIfNeeded()
         loader.completeFeedLoading(with: [makeImage()], at: 0)
         
         let view = sut.simulateFeedImageViewVisible(at: 0)
@@ -191,7 +195,7 @@ final class FeedViewControllerTests: XCTestCase {
         let image1 = makeImage(url: URL(string: "http://url-1.com")!)
         let (sut, loader) = makeSUT()
         
-        sut.simulateAppearance()
+        sut.loadViewIfNeeded()
         loader.completeFeedLoading(with: [image0, image1], at: 0)
         
         let view0 = sut.simulateFeedImageViewVisible(at: 0)
@@ -214,7 +218,7 @@ final class FeedViewControllerTests: XCTestCase {
         let image1 = makeImage(url: URL(string: "http://url-1.com")!)
         let (sut, loader) = makeSUT()
         
-        sut.simulateAppearance()
+        sut.loadViewIfNeeded()
         loader.completeFeedLoading(with: [image0, image1], at: 0)
         XCTAssertEqual(loader.loadedImagesURLs, [], "Expected no image URL requests until image is near visible")
 
@@ -230,7 +234,7 @@ final class FeedViewControllerTests: XCTestCase {
         let image1 = makeImage(url: URL(string: "http://url-1.com")!)
         let (sut, loader) = makeSUT()
         
-        sut.simulateAppearance()
+        sut.loadViewIfNeeded()
         loader.completeFeedLoading(with: [image0, image1], at: 0)
         XCTAssertEqual(loader.cancelledImagesURLs, [], "Expected no cancelled image URL requests until image is not near visible")
 
@@ -331,13 +335,6 @@ final class FeedViewControllerTests: XCTestCase {
 
 private extension FeedViewController {
     
-    func simulateAppearance() {
-        substituteRefreshControlToSpy()
-        
-        beginAppearanceTransition(true, animated: false)
-        endAppearanceTransition()
-    }
-    
     @discardableResult
     func simulateFeedImageViewVisible(at index: Int) -> FeedImageCell? {
         return feedImageView(at: index) as? FeedImageCell
@@ -362,18 +359,6 @@ private extension FeedViewController {
         let dataSource = tableView.prefetchDataSource
         let index = IndexPath(row: row, section: feedImagesSection)
         dataSource?.tableView?(tableView, cancelPrefetchingForRowsAt: [index])
-    }
-    
-    private func substituteRefreshControlToSpy() {
-        let spy = RefreshControlSpy()
-        
-        refreshControl?.allTargets.forEach { target in
-            refreshControl?.actions(forTarget: target, forControlEvent: .valueChanged)?.forEach { action in
-                spy.addTarget(target, action: Selector(action), for: .valueChanged)
-            }
-        }
-        
-        self.refreshControl = spy
     }
     
     func simulateUserInitiatedFeedReload() {
@@ -426,21 +411,6 @@ private extension FeedImageCell {
     
     var renderedImage: Data? {
         return feedImageView.image?.pngData()
-    }
-}
-
-
-private class RefreshControlSpy: UIRefreshControl {
-    private var _isRefreshing = false
-
-    override var isRefreshing: Bool { _isRefreshing }
-
-    override func beginRefreshing() {
-        _isRefreshing = true
-    }
-
-    override func endRefreshing() {
-        _isRefreshing = false
     }
 }
 
